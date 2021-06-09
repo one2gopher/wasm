@@ -12,6 +12,7 @@ import (
 )
 
 type bazelOptions struct {
+	bazelDir string
 	buildDir    string
 	bazelOutput string
 	bazelTarget string
@@ -31,6 +32,7 @@ func cppCmd(ctx *context.Context, opts *buildOptions) *cobra.Command {
 		},
 	}
 
+	cmd.Flags().StringVarP(&bazel.bazelDir, "bazel-dir", "k", ".", "Directory bazel cache file.")
 	cmd.Flags().StringVarP(&bazel.buildDir, "build-dir", "b", ".", "Directory containing the target BUILD file.")
 	cmd.Flags().StringVarP(&bazel.bazelOutput, "bazel-output", "f", "filter.wasm", "Path relative to `bazel-bin` to the wasm file produced by running the Bazel target.")
 	cmd.Flags().StringVarP(&bazel.bazelTarget, "bazel-target", "g", ":filter.wasm", "Name of the bazel target to run.")
@@ -46,6 +48,7 @@ func runBazelBuild(build buildOptions, bazel bazelOptions) (string, error) {
 	// container paths are currently hard-coded in builder image
 	args := []string{
 		"--rm",
+		"-v", bazel.bazelDir+":/root/.cache",
 		"-v", sourceDir + ":/src/workspace",
 		"-v", build.tmpDir + ":/build_output",
 		"-w", "/src/workspace",

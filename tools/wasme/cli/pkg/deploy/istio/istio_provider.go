@@ -165,7 +165,7 @@ func (p *Provider) ApplyFilter(filter *v1.FilterSpec) error {
 			return err
 		}
 		if err := abi.DefaultRegistry.ValidateIstioVersion(abiVersions, istioVersion); err != nil {
-			return errors.Errorf("image %v not supported by istio version %v", image.Ref(), istioVersion)
+			// return errors.Errorf("image %v not supported by istio version %v", image.Ref(), istioVersion)
 		}
 	} else {
 		logrus.WithFields(logrus.Fields{
